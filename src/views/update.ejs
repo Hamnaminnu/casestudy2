@@ -60,7 +60,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12"> 
-        <form class="signup2" action="/books/bookupdate" method="GET" style="border:1px solid #ccc">
+        <form class="signup2" action="/books/bookupdate" method="POST"  enctype="multipart/form-data" style="border:1px solid #ccc">
             <div class="container2">
               <h1>UPDATE A BOOK</h1>
               <hr><br><br>
@@ -69,7 +69,7 @@
               <label for="text"><b>more :</b></label>
               <input type="text" name="more" required><br><br>
               <label for="text"><b>add image :</b></label>
-              <input type="file" name="img" id="input" onchange="showFile()" accept="image/*"><br><br>
+              <input type="file" name="img1" id="input" onchange="showFile()" accept="image/*"><br><br>
               <div class="clearfix">
                 <button type="submit" id="submit" class="signupbtn button1">Done</button>
               </div>
