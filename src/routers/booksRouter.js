@@ -2,7 +2,11 @@ const express = require('express');
 const booksRouter = express.Router();
 const bookdata = require('../model/bookdata');
 booksRouter.use(express.static('./public'));
-
+booksRouter.use(express.urlencoded({extended:true}));
+var multer  = require('multer');
+const upload = require('express-fileupload');
+const fs = require("fs");
+booksRouter.use(upload());
 // var books = [
 //     {
 //         title: 'STAY WITH ME',
@@ -62,10 +66,10 @@ booksRouter.get('/update',function(req,res){
         nav1:[{link:'/',name:'LOG OUT'}]
     });
 });
-booksRouter.get('/bookupdate',function(req,res){
+booksRouter.post('/bookupdate',function(req,res){
     const uptitle = req.query.title;
     const upmore = req.query.more;
-    const upimg = req.query.img;
+    const upimg = req.files.img1.name;
     bookdata.updateOne({title:uptitle},{$set:{more:upmore,img:upimg}})
     // bookdata.find()
         .then(function(books){
@@ -77,6 +81,16 @@ booksRouter.get('/bookupdate',function(req,res){
     //     books
     // });
     })
+    var file = req.files.img1;
+    var filename = req.files.img1.name;
+
+    
+    file.mv("./public/images/"+filename,function(err){
+        if(err){
+            res.send(err);
+        }
+    });
+
     // .then(function(books){
     //     bookdata.find()
     //     .then(function(books){
