@@ -2,6 +2,11 @@ const express = require('express');
 const authorsRouter = express.Router();
 const authordata =require('../model/authordata');
 authorsRouter.use(express.static('./public'));
+authorsRouter.use(express.urlencoded({extended:true}));
+var multer  = require('multer');
+const upload = require('express-fileupload');
+const fs = require("fs");
+authorsRouter.use(upload());
 // authors = [
 //     {
 //        name: "K L Slater",
@@ -66,14 +71,24 @@ authorsRouter.use(express.static('./public'));
             res.redirect('/authors');
             })
     });
-    authorsRouter.get('/authupdate',function(req,res){
-        const upauthor = req.query.author;
-        const upmore = req.query.more;
-        const upimg = req.query.img;
+    authorsRouter.post('/authupdate',function(req,res){
+        const upauthor = req.body.author;
+        const upmore = req.body.more;
+        const upimg = req.files.img1.name;
         authordata.updateOne({author:upauthor},{$set:{more:upmore,img:upimg}})
         .then(function(authors){
         res.redirect('/authors');
         })
+        var file = req.files.img1;
+        var filename = req.files.img1.name;
+
+    
+    file.mv("./public/images/"+filename,function(err){
+        if(err){
+            res.send(err);
+        }
+    });
+
     });
     authorsRouter.get('/:id',function(req,res){
         const id = req.params.id;
